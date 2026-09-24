@@ -1,69 +1,131 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useState } from "react"
+import { BrandMark } from "@/components/chat/brand-mark"
+import { HistorySidebar } from "@/components/chat/history-sidebar"
+import { StatsSidebar } from "@/components/chat/stats-sidebar"
+import { MessageList } from "@/components/chat/message-list"
+import { ChatInput } from "@/components/chat/chat-input"
+import { Button } from "@/components/ui/button"
+
+export default function Page() {
+  const [statsOpen, setStatsOpen] = useState(false)
+  const [historyOpen, setHistoryOpen] = useState(false)
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="flex h-dvh flex-col overflow-hidden bg-background">
+      <header className="flex items-center justify-between gap-3 border-b border-border bg-background/80 px-4 py-3 backdrop-blur-sm sm:px-6">
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="rounded-xl text-muted-foreground hover:text-foreground"
+            onClick={() => setHistoryOpen((v) => !v)}
+            aria-expanded={historyOpen}
+            aria-controls="history-panel"
+            aria-label={historyOpen ? "Ocultar historial de chats" : "Mostrar historial de chats"}
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="4" width="18" height="16" rx="2.5" />
+              <path d="M9 4v16" />
+              <path d="M5.5 8.5h1.5M5.5 12h1.5" />
+            </svg>
+          </Button>
+          <BrandMark />
         </div>
-      </main>
-    </div>
-  );
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="gap-2 rounded-xl text-muted-foreground hover:text-foreground"
+            aria-label="Borrar la conversación"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 6h18" />
+              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+              <path d="M10 11v6" />
+              <path d="M14 11v6" />
+            </svg>
+            <span className="hidden sm:inline">Borrar</span>
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="rounded-xl lg:hidden"
+            onClick={() => setStatsOpen((v) => !v)}
+            aria-expanded={statsOpen}
+            aria-controls="stats-panel"
+          >
+            {statsOpen ? "Ocultar" : "Consumo"}
+          </Button>
+        </div>
+      </header>
+
+      <div className="flex min-h-0 flex-1">
+        <aside
+          className={
+            "hidden shrink-0 border-r border-border bg-sidebar transition-all duration-300 lg:block " +
+            (historyOpen ? "w-80" : "w-0 overflow-hidden border-r-0")
+          }
+        >
+          <div className="h-full w-80">
+            <HistorySidebar />
+          </div>
+        </aside>
+
+        <section className="flex min-h-0 flex-1 flex-col">
+          <div className="min-h-0 flex-1 overflow-y-auto">
+            <div className="mx-auto w-full max-w-3xl">
+              <MessageList />
+            </div>
+          </div>
+          <div className="mx-auto w-full max-w-3xl">
+            <ChatInput />
+          </div>
+        </section>
+
+        <aside className="hidden w-80 shrink-0 border-l border-border bg-sidebar lg:block">
+          <StatsSidebar />
+        </aside>
+      </div>
+
+      {historyOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true">
+          <button
+            type="button"
+            className="absolute inset-0 bg-foreground/20 backdrop-blur-sm"
+            aria-label="Cerrar historial de chats"
+            onClick={() => setHistoryOpen(false)}
+          />
+          <div
+            id="history-panel"
+            className="absolute left-0 top-0 h-full w-[85%] max-w-xs border-r border-border bg-sidebar shadow-soft-lg"
+          >
+            <HistorySidebar />
+          </div>
+        </div>
+      )}
+
+      {statsOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true">
+          <button
+            type="button"
+            className="absolute inset-0 bg-foreground/20 backdrop-blur-sm"
+            aria-label="Cerrar panel de consumo"
+            onClick={() => setStatsOpen(false)}
+          />
+          <div
+            id="stats-panel"
+            className="absolute right-0 top-0 h-full w-[85%] max-w-xs border-l border-border bg-sidebar shadow-soft-lg"
+          >
+            <StatsSidebar />
+          </div>
+        </div>
+      )}
+    </main>
+  )
 }
