@@ -1,8 +1,6 @@
 # Prompt para Copilot — Conexión con la API de Groq
 
-Tengo un componente de chat en Next.js (App Router, TypeScript) ya construido
-visualmente en `app/page.tsx`, con mensajes de ejemplo estáticos. Necesito que
-conectes la lógica real a la API de Groq, siguiendo estas reglas obligatorias:
+Tengo un componente de chat en Next.js (App Router, TypeScript) ya construido visualmente en `app/page.tsx`, con mensajes de ejemplo estáticos. Necesito que conectes la lógica real a la API de Groq, siguiendo estas reglas obligatorias:
 
 - La llamada debe hacerse con `fetch` nativo del navegador, NUNCA con el SDK de Groq ni ninguna librería externa.
 - Endpoint: `https://api.groq.com/openai/v1/chat/completions`
@@ -35,7 +33,7 @@ for chunk in completion:
     print(chunk.choices[0].delta.content or "", end="")
 ```
 
-Para mi proyecto usa `stream: false` (para simplificar el manejo de la respuesta en el frontend) y `reasoning_effort: "none"` (para respuestas más rápidas en un chat conversacional).
+Para el proyecto usa `stream: false` (para simplificar el manejo de la respuesta en el frontend) y `reasoning_effort: "none"` (para respuestas más rápidas en un chat conversacional).
 
 ## Requisitos adicionales
 
